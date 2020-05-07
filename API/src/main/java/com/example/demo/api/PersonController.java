@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RequestMapping("api/v1/person")
+
+@CrossOrigin (origins="*")
 @RestController
+@RequestMapping("api/v1/person")
 public class PersonController {
 
     private final PersonService personService;
-    
     
     @Autowired
     public PersonController(PersonService personService) {
@@ -38,17 +41,18 @@ public class PersonController {
     public List<Person> getAllPeople(){
         return personService.getAllPeople();
     }
-    
-    @GetMapping(path = "{id}")
+   
+    @GetMapping("{/id}")
     public Person getPersonById (@PathVariable("id")UUID id){
         return personService.getPersonById(id).orElse(null);
     }
-    @DeleteMapping(path = "{id}")
+   
+    @DeleteMapping("{/id}")
     public void deletePersonById(@PathVariable("id") UUID id){
         personService.deletePerson(id);
     }
-    
-    @PutMapping(path = "{id}")
+
+    @PutMapping("/{id}")
     public void updatePerson(@PathVariable("id") UUID id, @Valid @NonNull @RequestBody Person personToUpdate){
         personService.updatePerson(id, personToUpdate);
     }
